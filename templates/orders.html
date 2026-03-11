@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mx-auto p-6">
+
+<h1 class="text-3xl font-bold mb-6">
+Мои заказы
+</h1>
+
+{% for order in orders %}
+
+<div class="bg-white p-5 rounded-xl shadow mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+<div class="flex items-center gap-4">
+
+{% with item=order.items.first %}
+
+{% if item and item.product.image %}
+
+<img
+src="{{ item.product.image.url }}"
+alt="{{ item.product.name }}"
+class="w-20 h-20 object-contain bg-gray-100 rounded"
+/>
+
+{% else %}
+
+<div class="w-20 h-20 bg-gray-200 flex items-center justify-center rounded text-gray-400">
+Нет фото
+</div>
+
+{% endif %}
+
+<div>
+
+<h2 class="text-lg font-semibold">
+Заказ #{{ order.id }}
+</h2>
+
+{% if item %}
+<p class="text-gray-600">
+Товар: {{ item.product.name }}
+</p>
+{% endif %}
+
+<p class="text-gray-600">
+Статус: {{ order.status }}
+</p>
+
+<p class="font-semibold text-green-600">
+{{ order.total_price }} сом
+</p>
+
+</div>
+
+{% endwith %}
+
+</div>
+
+<a href="/orders/{{ order.id }}"
+class="text-blue-500 hover:underline">
+Подробнее →
+</a>
+
+</div>
+
+{% empty %}
+
+<div class="bg-white p-6 rounded shadow text-center">
+
+<p class="text-gray-500">
+У вас пока нет заказов
+</p>
+
+<a href="/" class="text-blue-500 hover:underline mt-3 inline-block">
+Перейти к товарам
+</a>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

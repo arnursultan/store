@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mx-auto p-6">
+
+<div class="bg-white rounded-xl shadow-lg p-6 grid md:grid-cols-2 gap-10">
+
+<!-- IMAGE -->
+
+<div class="bg-gray-50 rounded-xl flex items-center justify-center p-6">
+
+{% if product.image %}
+
+<img
+src="{{ product.image.url }}"
+alt="{{ product.name }}"
+loading="lazy"
+class="max-h-[420px] max-w-full object-contain hover:scale-105 transition duration-300"
+/>
+
+{% else %}
+
+<div class="h-[420px] flex items-center justify-center w-full bg-gray-200 rounded-lg">
+<p class="text-gray-500">Нет изображения</p>
+</div>
+
+{% endif %}
+
+</div>
+
+<!-- INFO -->
+
+<div>
+
+<h1 class="text-3xl font-bold">
+{{ product.name }}
+</h1>
+
+<p class="mt-4 text-gray-600 leading-relaxed">
+{{ product.description }}
+</p>
+
+<h2 class="text-3xl font-bold mt-6 text-green-600">
+{{ product.price }} сом
+</h2>
+
+<a href="/cart/add/{{ product.id }}"
+class="mt-6 inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow transition">
+Добавить в корзину
+</a>
+
+<hr class="my-8">
+
+<h2 class="text-xl font-semibold mb-3">
+Рейтинг: {{ avg_rating|default:"Нет оценок" }} ⭐
+</h2>
+
+<h3 class="text-lg font-semibold mb-3">
+Отзывы
+</h3>
+
+<div class="space-y-3">
+
+{% for review in reviews %}
+
+<div class="bg-gray-100 p-4 rounded-lg">
+
+<p class="font-semibold text-sm">
+{{ review.user }}
+</p>
+
+<p class="text-yellow-500 text-sm">
+⭐ {{ review.rating }}
+</p>
+
+<p class="text-gray-700 text-sm">
+{{ review.text }}
+</p>
+
+</div>
+
+{% empty %}
+
+<p class="text-gray-500 text-sm">
+Пока нет отзывов
+</p>
+
+{% endfor %}
+
+</div>
+
+{% if user.is_authenticated %}
+
+<form method="post" action="{% url 'add_review' product.id %}">
+
+{% csrf_token %}
+
+<select name="rating" class="border rounded-lg p-2 w-full">
+
+<option value="1">⭐ 1</option>
+<option value="2">⭐ 2</option>
+<option value="3">⭐ 3</option>
+<option value="4">⭐ 4</option>
+<option value="5">⭐ 5</option>
+
+</select>
+
+<textarea
+name="text"
+class="border rounded-lg w-full p-3"
+rows="4"
+placeholder="Ваш отзыв"
+required
+></textarea>
+
+<button
+class="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg transition shadow">
+Отправить отзыв
+</button>
+
+</form>
+
+{% else %}
+
+<p class="mt-4 text-gray-500 text-sm">
+Чтобы оставить отзыв — войдите в аккаунт
+</p>
+
+{% endif %}
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

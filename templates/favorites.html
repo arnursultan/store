@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mx-auto p-6">
+
+<h1 class="text-3xl font-bold mb-6">
+Избранное
+</h1>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+{% for product in products %}
+
+<div class="bg-white rounded-xl shadow hover:shadow-xl transition p-4 flex flex-col product-card">
+
+<div class="aspect-[4/3] overflow-hidden rounded-lg bg-gray-100">
+
+{% if product.image %}
+<img src="{{ product.image.url }}" class="w-full h-full object-cover">
+{% endif %}
+
+</div>
+
+<h2 class="text-lg font-semibold mt-3">
+{{ product.name }}
+</h2>
+
+<p class="text-yellow-500 text-sm">
+⭐ {{ product.avg_rating|default:"0" }}
+</p>
+
+<p class="text-green-600 font-bold">
+{{ product.price }} сом
+</p>
+
+<div class="flex items-center justify-between mt-auto pt-4">
+
+<a href="/product/{{ product.id }}" class="text-blue-500 text-sm hover:underline">
+Подробнее
+</a>
+
+<div class="flex gap-2">
+
+<button
+type="button"
+class="bg-blue-500 text-white px-3 py-1 rounded"
+onclick="addToCart({{ product.id }})">
+🛒
+</button>
+
+<a
+href="/favorites/toggle/{{ product.id }}"
+class="text-red-500 text-xl hover:scale-110 transition"
+onclick="removeCard(this)">
+❤️
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% empty %}
+
+<p class="text-gray-500">
+У вас нет избранных товаров
+</p>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+
+<script>
+
+function removeCard(el){
+
+const card = el.closest(".product-card")
+
+setTimeout(() => {
+
+if(card){
+card.remove()
+}
+
+}, 50)
+
+}
+
+
+function addToCart(productId){
+
+fetch(`/cart/add/${productId}/`)
+.then(res => res.json())
+.then(data => {
+
+alert("Товар добавлен в корзину")
+
+})
+
+}
+
+</script>
+
+{% endblock %}

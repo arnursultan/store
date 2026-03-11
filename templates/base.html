@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{% block title %}Store{% endblock %}</title>
+
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+<nav class="bg-black text-white">
+<div class="container mx-auto flex items-center justify-between p-4">
+
+<a href="/" class="text-xl font-bold hover:text-gray-300 transition">
+Store
+</a>
+
+<!-- 🔎 LIVE SEARCH -->
+<div class="relative hidden md:block">
+
+<input
+id="searchInput"
+type="text"
+placeholder="Поиск товаров..."
+class="text-black px-3 py-1 rounded w-64"
+autocomplete="off"
+>
+
+<div
+id="searchResults"
+class="absolute bg-white text-black w-full mt-1 rounded shadow hidden z-50">
+</div>
+
+</div>
+
+<div class="flex items-center gap-4 text-sm">
+
+<a href="/cart/" class="hover:text-gray-300 transition">
+Корзина
+</a>
+
+<a href="/favorites/" class="hover:text-gray-300 transition">
+Избранное
+</a>
+
+{% if user.is_authenticated %}
+
+<a href="/users/profile/" class="hover:text-gray-300 transition">
+Профиль
+</a>
+
+<a href="/users/logout/" class="hover:text-red-400 transition">
+Выйти
+</a>
+
+{% else %}
+
+<a href="/users/login/" class="hover:text-gray-300 transition">
+Войти
+</a>
+
+<a href="/users/register/" class="hover:text-gray-300 transition">
+Регистрация
+</a>
+
+{% endif %}
+
+</div>
+
+</div>
+</nav>
+
+<main class="container mx-auto flex-1 p-4">
+
+{% block content %}
+{% endblock %}
+
+</main>
+
+
+<!-- ⚡ LIVE SEARCH SCRIPT -->
+
+<script>
+
+const searchInput = document.getElementById("searchInput")
+const resultsBox = document.getElementById("searchResults")
+
+if(searchInput){
+
+searchInput.addEventListener("input", function(){
+
+const query = this.value.trim()
+
+if(query.length < 2){
+resultsBox.classList.add("hidden")
+return
+}
+
+fetch(`/live-search/?q=${query}`)
+.then(res => res.json())
+.then(data => {
+
+resultsBox.innerHTML = ""
+
+if(data.products.length === 0){
+
+resultsBox.innerHTML = `
+<div class="p-2 text-gray-500">
+Ничего не найдено
+</div>
+`
+
+resultsBox.classList.remove("hidden")
+return
+}
+
+data.products.forEach(product => {
+
+resultsBox.innerHTML += `
+<a href="/product/${product.id}/"
+class="block p-2 hover:bg-gray-100 border-b">
+${product.name}
+</a>
+`
+
+})
+
+resultsBox.classList.remove("hidden")
+
+})
+
+})
+
+document.addEventListener("click", function(e){
+
+if(!searchInput.contains(e.target)){
+resultsBox.classList.add("hidden")
+}
+
+})
+
+}
+
+</script>
+
+</body>
+</html>

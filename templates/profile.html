@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="flex justify-center mt-10">
+
+<div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg">
+
+<h1 class="text-3xl font-bold mb-6 text-center">
+Профиль
+</h1>
+
+<div class="space-y-3">
+
+<p>
+<span class="font-semibold">Username:</span>
+{{ user.username }}
+</p>
+
+<p>
+<span class="font-semibold">Email:</span>
+{{ user.email|default:"Не указан" }}
+</p>
+
+</div>
+
+<div class="mt-6 flex gap-4">
+
+<a href="/orders/"
+class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition">
+Мои заказы
+</a>
+
+<a href="/favorites/"
+class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded transition">
+Избранное
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
