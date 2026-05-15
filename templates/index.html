@@ -10,8 +10,6 @@
 
 <div class="bg-white rounded-xl shadow hover:shadow-2xl transition duration-300 p-4 flex flex-col">
 
-<!-- IMAGE -->
-
 <div class="aspect-[4/3] overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center">
 
 {% if product.image %}
@@ -33,19 +31,13 @@ class="w-full h-full object-cover hover:scale-105 transition duration-300"
 
 </div>
 
-<!-- TITLE -->
-
 <h2 class="text-lg font-semibold mt-3 line-clamp-2">
 {{ product.name }}
 </h2>
 
-<!-- PRICE -->
-
 <p class="text-green-600 font-bold mt-1">
 {{ product.price }} сом
 </p>
-
-<!-- ACTIONS -->
 
 <div class="flex items-center justify-between mt-auto pt-4">
 
